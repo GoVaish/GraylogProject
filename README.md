@@ -53,13 +53,4 @@ The ML model uses key traffic features such as:
 - **TCP Flags:** SYN, ACK, PSH, URG counts  
 - **Request/Response Ratios:** Fwd vs Bwd traffic imbalance  
 
-✅ Detectable Attacks:  
-- UDP Flood  
-- ICMP Flood  
-- SYN Flood  
-- DNS Amplification  
-- HTTP Flood  
-- PSH/ACK Flood  
-- Slowloris  
-
 ---
