@@ -69,28 +69,84 @@ Graylog Dashboards visualized traffic anomalies in real-time, providing actionab
 
 ## 🚀 Getting Started
 
-**Clone the Repository**
+**Machines deployment Guide**
 
-git clone https://github.com/GoVaish/GraylogProject
+ git clone https://github.com/GoVaish/GraylogProject
 
+**Prereqs (Ubuntu 24.04).** 
+ 1) Install once
+sudo apt update
+sudo apt -y install tcpdump openjdk-8-jre-headless filebeat logstash curl jq
 
-**Set up Python environment**
+**Install env files, runners, and services**
+ 2) Env files → /etc/
+sudo install -m 0644 system/env/tcpdump-cfm.env /etc/tcpdump-cfm.env
+sudo install -m 0644 system/env/cfm-watch.env   /etc/cfm-watch.env
 
-python3 -m venv venv
-source venv/bin/activate
-pip install -r api/requirements.txt
+ 3) Runner scripts → /usr/local/sbin
+sudo install -m 0755 system/bin/tcpdump-cfm.sh /usr/local/sbin/tcpdump-cfm.sh
+sudo install -m 0755 system/bin/cfm-watch.sh   /usr/local/sbin/cfm-watch.sh
 
+4) Systemd units → /etc/systemd/system
+sudo install -m 0644 system/systemd/tcpdump-cfm.service /etc/systemd/system/tcpdump-cfm.service
+sudo install -m 0644 system/systemd/cfm-watch.service   /etc/systemd/system/cfm-watch.service
 
-**Configure Filebeat & Logstash**
-Update filebeat.yml and logstash.conf with your server IPs and ports.
-/etc/filebeat/filebeat.yml
-/etc/logstash/conf.d/ddos.conf
+5) Prepare data paths
+sudo mkdir -p /var/lib/tcpdump /var/log/cicflowmeter /var/log/traffic
+sudo chown tcpdump:tcpdump /var/lib/tcpdump
+sudo chmod 0750 /var/lib/tcpdump
 
-**Run ML Inference API**
+6) Enable & start capture → features → shipping
+sudo systemctl daemon-reload
+sudo systemctl enable --now tcpdump-cfm.service
+sudo systemctl enable --now cfm-watch.service
 
-cd api
-python app.py
+**Install Filebeat & Logstash pipeline**
 
+7) Copy pipeline configs
+sudo install -m 0644 log-pipeline/filebeat.yml /etc/filebeat/filebeat.yml
+sudo install -m 0644 log-pipeline/logstash.conf /etc/logstash/conf.d/dns-ddos.conf
 
-**Import Graylog Dashboards**
-Upload JSON from /graylog-dashboards/.
+8) Optional: set output endpoints via systemd env (no config edits)
+sudo mkdir -p /etc/systemd/system/logstash.service.d
+sudo tee /etc/systemd/system/logstash.service.d/override.conf >/dev/null <<'EOF'
+[Service]
+Environment=GRAYLOG_HOST=192.168.56.6
+Environment=GRAYLOG_PORT=12201
+Environment=API_URL=http://192.168.56.10:8000/ingest
+# Environment=API_KEY=your-secret-key   
+ 
+9) Validate Logstash config, then restart both
+sudo /usr/share/logstash/bin/logstash --path.settings /etc/logstash -t -f /etc/logstash/conf.d/dns-ddos.conf
+sudo systemctl daemon-reload
+sudo systemctl restart logstash
+sudo systemctl enable logstash
+sudo systemctl restart filebeat
+sudo systemctl enable filebeat
+
+**Smoke Tests**
+
+>> Watch pcap rotation
+ls -ltr /var/lib/tcpdump | tail
+
+>> Generate DNS traffic from any VM (replace <DNS-IP> as needed)
+dig @<DNS-IP> example.com +short
+
+>> Confirm CSVs appear
+ls -ltr /var/log/cicflowmeter | tail
+
+>> Check Logstash logs for HTTP output success
+journalctl -u logstash -e --no-pager | tail -n 100
+
+>> Independently test API (replace URL)
+curl -sS -X POST -H 'Content-Type: application/json' \
+  -d '{"ping":"ok","ts":"'"$(date -Iseconds)"'"}' \
+  http://192.168.56.10:8000/ingest | jq .
+
+>> Send a sample JSON line for the 'traffic' input
+echo '{"event":"dns","qname":"example.com","src":"192.168.56.104"}' | sudo tee -a /var/log/traffic/test.json
+
+>> Confirm Graylog input is running (UI → System → Inputs → GELF UDP 12201)
+
+journalctl -u filebeat -e --no-pager | tail -n 100 (Check Filebeat logs)
+journalctl -u logstash -e --no-pager | tail -n 100 (Check Logstash logs)
