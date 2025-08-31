@@ -66,3 +66,30 @@ Random Forest achieved near-perfect accuracy (≈ 99.99%) with very low false po
 XGBoost delivered robust performance with higher recall, reducing missed attack detections.
 
 Graylog Dashboards visualized traffic anomalies in real-time, providing actionable alerts within 2 seconds.
+
+## 🚀 Getting Started
+
+**Clone the Repository**
+
+git clone https://github.com/<your-username>/dns-ddos-detection-graylog-ml.git
+cd dns-ddos-detection-graylog-ml
+
+
+**Set up Python environment**
+
+python3 -m venv venv
+source venv/bin/activate
+pip install -r api/requirements.txt
+
+
+**Configure Filebeat & Logstash**
+Update filebeat.yml and logstash.conf with your server IPs and ports.
+
+**Run ML Inference API**
+
+cd api
+python app.py
+
+
+**Import Graylog Dashboards**
+Upload JSON from /graylog-dashboards/.
