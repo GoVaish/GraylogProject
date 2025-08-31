@@ -141,7 +141,7 @@ journalctl -u logstash -e --no-pager | tail -n 100
 >> Independently test API (replace URL)
 curl -sS -X POST -H 'Content-Type: application/json' \
   -d '{"ping":"ok","ts":"'"$(date -Iseconds)"'"}' \
-  http://192.168.56.10:8000/ingest | jq .
+  http://<HOST_IP>:8000/ingest | jq .
 
 >> Send a sample JSON line for the 'traffic' input
 echo '{"event":"dns","qname":"example.com","src":"192.168.56.104"}' | sudo tee -a /var/log/traffic/test.json
