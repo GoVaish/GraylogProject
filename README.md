@@ -84,6 +84,8 @@ pip install -r api/requirements.txt
 
 **Configure Filebeat & Logstash**
 Update filebeat.yml and logstash.conf with your server IPs and ports.
+/etc/filebeat/filebeat.yml
+/etc/logstash/conf.d/ddos.conf
 
 **Run ML Inference API**
 
