@@ -71,8 +71,7 @@ Graylog Dashboards visualized traffic anomalies in real-time, providing actionab
 
 **Clone the Repository**
 
-git clone https://github.com/<your-username>/dns-ddos-detection-graylog-ml.git
-cd dns-ddos-detection-graylog-ml
+git clone https://github.com/GoVaish/GraylogProject
 
 
 **Set up Python environment**
