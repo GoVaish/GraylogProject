@@ -1,0 +1,20 @@
+[Unit]
+Description=CICFlowMeter watcher (process rotated pcaps to CSV)
+After=network-online.target tcpdump-cfm.service
+Wants=tcpdump-cfm.service
+
+[Service]
+Type=simple
+EnvironmentFile=-/etc/cfm-watch.env
+ExecStart=/usr/local/sbin/cfm-watch.sh
+Restart=always
+RestartSec=2
+# Harden
+User=root
+NoNewPrivileges=yes
+ProtectSystem=full
+ProtectHome=true
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,21 @@
+[Unit]
+Description=TCPDUMP DNS capture with rotation for CICFlowMeter
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+Type=simple
+EnvironmentFile=-/etc/tcpdump-cfm.env
+ExecStart=/usr/local/sbin/tcpdump-cfm.sh
+Restart=always
+RestartSec=2
+# Harden
+NoNewPrivileges=yes
+ProtectSystem=full
+ProtectHome=true
+PrivateTmp=true
+CapabilityBoundingSet=CAP_NET_RAW CAP_NET_ADMIN
+AmbientCapabilities=CAP_NET_RAW CAP_NET_ADMIN
+
+[Install]
+WantedBy=multi-user.target
