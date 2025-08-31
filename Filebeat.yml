@@ -1,0 +1,41 @@
+# =========================== Filebeat global ============================
+filebeat.registry.path: /var/lib/filebeat
+logging.level: info
+
+# ============================ Filebeat inputs ===========================
+filebeat.inputs:
+  # 1) Server traffic / JSON logs  → Graylog
+  - type: log
+    id: traffic-json
+    enabled: true
+    paths:
+      - /var/log/traffic/*.json
+    json.keys_under_root: true
+    json.add_error_key: true
+    fields:
+      pipeline: traffic
+      log_type: dns_traffic
+    fields_under_root: true
+    scan_frequency: 5s
+    close_inactive: 2m
+    clean_inactive: 72h
+    ignore_older: 48h
+
+  # 2) CICFlowMeter CSV  → ML API
+  - type: log
+    id: cicflowmeter-csv
+    enabled: true
+    paths:
+      - /var/log/cicflowmeter/*.csv
+      pipeline: cicflowmeter
+      log_type: cicflowmeter_csv
+    fields_under_root: true
+    scan_frequency: 5s
+    close_inactive: 2m
+    clean_inactive: 168h
+    ignore_older: 96h
+
+# ============================== Outputs ================================
+  hosts: ["${LOGSTASH_HOST:192.168.56.5}:${LOGSTASH_PORT:5044}"]
+  ssl.enabled: false
+
