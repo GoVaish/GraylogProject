@@ -114,7 +114,7 @@ sudo tee /etc/systemd/system/logstash.service.d/override.conf >/dev/null <<'EOF'
 Environment=GRAYLOG_HOST=192.168.56.6
 Environment=GRAYLOG_PORT=12201
 Environment=API_URL=http://192.168.56.10:8000/ingest
-# Environment=API_KEY=your-secret-key   
+ **Environment=API_KEY=your-secret-key**  
  
 9) Validate Logstash config, then restart both
 sudo /usr/share/logstash/bin/logstash --path.settings /etc/logstash -t -f /etc/logstash/conf.d/dns-ddos.conf
