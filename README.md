@@ -273,9 +273,7 @@ dig @<dns-server-ip> example.com +short
 for i in {1..200}; do dig @<dns-server-ip> example.com +nocookie +time=1 +tries=1 >/dev/null; done
 
 
-Ensured both VMs are on the same host-only/bridged network and that port 53 is open.
-
-⚠️ Known Issues & Workarounds
+**Known Issues & Workarounds**
 
 GELF message truncation on very large events: keep payloads lean (we remove bulky fields in Logstash), or switch to TCP GELF if needed.
 
@@ -297,7 +295,7 @@ Explicit IPv4 everywhere: avoids dual-stack surprises in lab networks.
 
 Interface pinning: enp0s8 (host-only/bridged) to get EN10MB frames consistently.
 
-🧪 Quick Health Checklist
+# 🧪 Quick Health Checklist
 **Listeners**
 ss -lntup | grep -E ':(5044|12201)\b'
 
