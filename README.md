@@ -56,8 +56,6 @@ Flow Statistics: Duration, Bytes/s, Packets/s, Inter-Arrival Times (IAT)
 
 Packet Features: Min/Max/Mean packet length, variance, standard deviation
 
-TCP Flags: SYN, ACK, PSH, URG counts
-
 Traffic Ratios: Forward vs Backward packet/byte imbalance
 
 ## 🚨 Key Outcomes
