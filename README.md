@@ -185,7 +185,7 @@ input { beats { port => 5044 host => "0.0.0.0" } }
 
 Then:
 
-sudo systemctl restart logstash && ss -lntup | grep 5044
+sudo systemctl restart logstash && ss -lntup ! grep 5044
 
 3) “Text fields are not optimised for aggregations” in Graylog/Elasticsearch
 
