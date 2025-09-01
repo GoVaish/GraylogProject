@@ -44,8 +44,9 @@ Custom REST API (Feature preprocessing + ML inference)
 Graylog 5 Dashboards (Monitoring + Alerting)
 
 
-## 📌 High-level Diagram:
-(Insert your architecture-diagram.png here once added in repo)
+ **📌 High-level Diagram:**
+<img width="11800" height="420" alt="Blank_diagram 1" src="https://github.com/user-attachments/assets/6b9fd074-1086-4f93-9834-fe7c00fb1286" />
+
 
 📊 Features & Detection
 
