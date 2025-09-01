@@ -148,8 +148,8 @@ echo '{"event":"dns","qname":"example.com","src":"192.168.56.104"}' | sudo tee -
 
 >> Confirm Graylog input is running (UI → System → Inputs → GELF UDP 12201)
 
-journalctl -u filebeat -e --no-pager | tail -n 100 (Check Filebeat logs)
-journalctl -u logstash -e --no-pager | tail -n 100 (Check Logstash logs)
+journalctl -u filebeat -e --no-pager ! tail -n 100 (Check Filebeat logs)
+journalctl -u logstash -e --no-pager ! tail -n 100 (Check Logstash logs)
 
 
 # 🧩 Challenges Faced & Fixes 
