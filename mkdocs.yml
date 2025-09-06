@@ -1,0 +1,11 @@
+site_name: DNS DDoS Attack Detection with Machine Learning and visualize on graylog
+theme:
+  name: material
+plugins:
+  - search 
+nav:
+  - Home: index.md
+  - Objective: obj.md
+  - Literature Review: lit.md
+  - Machine Learning: ml.md
+  - Testing Setup: test.md
